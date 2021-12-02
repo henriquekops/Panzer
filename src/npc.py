@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # project dependencies
-from common.opengl_object import OpenGlObject
+from src.common.opengl_object import OpenGlObject
 
 
 OpenGlObject.register
@@ -16,7 +16,7 @@ class Npc():
         self.is_friendly = is_friendly
         pass
 
-    def draw():
+    def draw(self):
         """
         Draw npc
         """

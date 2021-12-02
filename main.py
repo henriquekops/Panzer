@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# project dependencies
+from src.floor import Floor
+
+# external dependencies
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -14,6 +18,7 @@ nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
 
+floor = Floor()
 
 def init():
     """
@@ -107,45 +112,6 @@ def PosicUser():
     gluLookAt(0, 4, 10, 0,0,0, 0,1.0,0.0) 
 
 
-def DesenhaLadrilho():
-    """
-    Draw floor cell 1x1 (center at 0,0,0 and over XZ axis)
-    """
-    glColor3f(0,0,1) # desenha QUAD preenchido
-    glBegin ( GL_QUADS )
-    glNormal3f(0,1,0)
-    glVertex3f(-0.5,  0.0, -0.5)
-    glVertex3f(-0.5,  0.0,  0.5)
-    glVertex3f( 0.5,  0.0,  0.5)
-    glVertex3f( 0.5,  0.0, -0.5)
-    glEnd()
-    
-    glColor3f(1,1,1) # desenha a borda da QUAD 
-    glBegin ( GL_LINE_STRIP )
-    glNormal3f(0,1,0)
-    glVertex3f(-0.5,  0.0, -0.5)
-    glVertex3f(-0.5,  0.0,  0.5)
-    glVertex3f( 0.5,  0.0,  0.5)
-    glVertex3f( 0.5,  0.0, -0.5)
-    glEnd()
-    
-
-def DesenhaPiso():
-    """
-    Draw the floor
-    """
-    glPushMatrix()
-    glTranslated(-20,-1,-10)
-    for x in range(-20, 20):
-        glPushMatrix()
-        for z in range(-20, 20):
-            DesenhaLadrilho()
-            glTranslated(0, 0, 1)
-        glPopMatrix()
-        glTranslated(1, 0, 0)
-    glPopMatrix()     
-
-
 def display():
     """
     Display everything
@@ -159,8 +125,8 @@ def display():
 
     glMatrixMode(GL_MODELVIEW)
     
-     
-    DesenhaPiso()
+    floor.draw()
+
     glColor3f(0.5,0.0,0.0) # Vermelho
     glPushMatrix()
     glTranslatef(-2,0,0)

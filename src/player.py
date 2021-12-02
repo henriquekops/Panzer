@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # project dependencies
-from common.opengl_object import OpenGlObject
+from src.common.opengl_object import OpenGlObject
 
 
 OpenGlObject.register
@@ -15,7 +15,7 @@ class Player():
     def __init__(self) -> None:
         super().__init__()
 
-    def draw():
+    def draw(self):
         """
         Draw Player
         """

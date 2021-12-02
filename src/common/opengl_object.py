@@ -12,5 +12,5 @@ class OpenGlObject(abc.ABC):
     """
 
     @abc.abstractclassmethod
-    def draw():
+    def draw(self):
         pass
