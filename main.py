@@ -3,6 +3,7 @@
 
 # project dependencies
 from src.floor import Floor
+from src.player import Player
 
 # external dependencies
 from OpenGL.GL import *
@@ -10,15 +11,18 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import time
 
+
 __author__ = ["Henrique Kops", "Gabriel Castro"]
 __credits__ = "Marcio Pinho"
 
-Angulo = 0.0
+angle = 0.0
+aspect_ratio= 0.0
 nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
 
 floor = Floor()
+player = Player()
 
 def init():
     """
@@ -36,23 +40,23 @@ def reshape(w: int, h: int):
     """
     Treat screen reshaping
     """
-    global AspectRatio
+    global aspect_ratio
 	# Evita divisÃ£o por zero, no caso de uam janela com largura 0.
     if h == 0:
         h = 1
     # Ajusta a relaÃ§Ã£o entre largura e altura para evitar distorÃ§Ã£o na imagem.
     # Veja funÃ§Ã£o "PosicUser".
-    AspectRatio = w / h
+    aspect_ratio = w / h
 	# Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     # Seta a viewport para ocupar toda a janela
     glViewport(0, 0, w, h)
     
-    PosicUser()
+    player.set_position(aspect_ratio)
 
 
-def DefineLuz():
+def set_light():
     """
     Set light system
     """
@@ -97,31 +101,17 @@ def DesenhaCubo():
     """
     glutSolidCube(1)
 
- 
-def PosicUser():
-    """
-    Position user
-    """
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    #print ("AspectRatio", AspectRatio)
-    gluPerspective(40,AspectRatio,0.01,50) # Projecao perspectiva
-    
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
-    gluLookAt(0, 4, 10, 0,0,0, 0,1.0,0.0) 
-
 
 def display():
     """
     Display everything
     """
-    global Angulo
+    global angle
     # Limpa a tela com  a cor de fundo
     glClear(GL_COLOR_BUFFER_BIT)
 
-    DefineLuz()
-    PosicUser()
+    set_light()
+    player.set_position(aspect_ratio)
 
     glMatrixMode(GL_MODELVIEW)
     
@@ -130,18 +120,18 @@ def display():
     glColor3f(0.5,0.0,0.0) # Vermelho
     glPushMatrix()
     glTranslatef(-2,0,0)
-    glRotatef(Angulo,0,1,0)
+    glRotatef(angle,0,1,0)
     DesenhaCubo()
     glPopMatrix()
     
     glColor3f(0.5,0.5,0.0) # Amarelo
     glPushMatrix()
     glTranslatef(2,0,0)
-    glRotatef(-Angulo,0,1,0)
+    glRotatef(-angle,0,1,0)
     DesenhaCubo()
     glPopMatrix()
 
-    Angulo = Angulo + 1
+    angle = angle + 1
 
     glutSwapBuffers()
 
