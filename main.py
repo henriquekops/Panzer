@@ -38,7 +38,7 @@ def init():
 
 def reshape(w: int, h: int):
     """
-    Treat screen reshaping
+    Handle screen reshaping
     """
     global aspect_ratio
 	# Evita divisÃ£o por zero, no caso de uam janela com largura 0.
@@ -64,7 +64,7 @@ def set_light():
     LuzAmbiente = [0.4, 0.4, 0.4] 
     LuzDifusa   = [0.7, 0.7, 0.7]
     LuzEspecular = [0.9, 0.9, 0.9]
-    PosicaoLuz0  = [2.0, 3.0, 0.0 ]  # PosiÃ§Ã£o da Luz
+    PosicaoLuz0  = [2.0, 3.0, 0.0 ]
     Especularidade = [1.0, 1.0, 1.0]
 
     # ****************  Fonte de Luz 0
@@ -173,13 +173,13 @@ def arrow_keys(a_keys: int, x: int, y: int):
     Handle arrow keys
     """
     if a_keys == GLUT_KEY_UP:         # Se pressionar UP
-        pass
+        player.forward()
     if a_keys == GLUT_KEY_DOWN:       # Se pressionar DOWN
-        pass
+        player.backward()
     if a_keys == GLUT_KEY_LEFT:       # Se pressionar LEFT
-        pass
+        player.left()
     if a_keys == GLUT_KEY_RIGHT:      # Se pressionar RIGHT
-        pass
+        player.right()
 
     glutPostRedisplay()
 
