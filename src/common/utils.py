@@ -36,4 +36,4 @@ class Utils:
         """
         Create unit vector of parametrized vector
         """
-        return vector / cls.module(vector)
+        return np.around(vector / cls.module(vector))

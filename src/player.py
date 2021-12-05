@@ -27,8 +27,8 @@ class Player():
 
     def __init__(self) -> None:
         super().__init__()
-        self.alpha = 0.2
-        self.step_size = 5
+        self.alpha = 0.45
+        self.step_size = 1
         self.obs = np.array((0.0, 0.0, 10.0))
         self.tgt = np.array((0.0, 0.0, 0.0))
         self.cam = np.array((0.0, 1.0, 0.0))

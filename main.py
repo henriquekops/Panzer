@@ -28,9 +28,7 @@ def init():
     """
     Initialize opengl parameters
     """
-    # Define a cor do fundo da tela (BRANCO) 
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    
     glEnable(GL_DEPTH_TEST)
     glEnable (GL_CULL_FACE )
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
@@ -184,18 +182,6 @@ def arrow_keys(a_keys: int, x: int, y: int):
     glutPostRedisplay()
 
 
-def mouse(button: int, state: int, x: int, y: int):
-    """
-    Handle mouse
-    """
-    glutPostRedisplay()
-
-def mouseMove(x: int, y: int):
-    """
-    Handle mouse move
-    """
-    glutPostRedisplay()
-
 if __name__ == "__main__":
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_RGBA)
@@ -203,15 +189,12 @@ if __name__ == "__main__":
     glutInitWindowSize(650, 500)
     glutInitWindowPosition(100, 100)
     wind = glutCreateWindow("OpenGL 3D")
-    init ()
     glutDisplayFunc(display)
     glutIdleFunc (animate)
     glutReshapeFunc(reshape)
     glutKeyboardFunc(keyboard)
     glutSpecialFunc(arrow_keys)
-
-    #glutMouseFunc(mouse)
-    #glutMotionFunc(mouseMove)
+    init ()
 
     try:
         glutMainLoop()
