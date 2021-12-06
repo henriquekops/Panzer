@@ -123,6 +123,7 @@ def display():
     
     floor.draw()
     wall.draw()
+    player.draw()
 
     # glColor3f(0.5,0.0,0.0) # Vermelho
     # glPushMatrix()
@@ -185,9 +186,11 @@ def arrow_keys(a_keys: int, x: int, y: int):
         player.backward()
     if a_keys == GLUT_KEY_LEFT:       # Se pressionar LEFT
         player.left()
-    if a_keys == GLUT_KEY_RIGHT:      # Se pressionar RIGHT
+        player.rotate(False)
+    elif a_keys == GLUT_KEY_RIGHT:      # Se pressionar RIGHT
         player.right()
-
+        player.rotate(True)
+    
     glutPostRedisplay()
 
 

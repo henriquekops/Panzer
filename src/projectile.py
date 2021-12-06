@@ -16,6 +16,9 @@ class Projectile:
 
     def draw(self):
         """
-        Draw wall
+        Draws projectile
         """
-        pass
+        glPushMatrix()
+        glTranslated(posx,-0.2,posz)
+        glutSolidSphere(0.2,10,10)
+        glPopMatrix()

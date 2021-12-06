@@ -26,10 +26,11 @@ class Player:
     """
 
     def __init__(self, x:float, z:float) -> None:
-        self.alpha = 0.45
+        self.alpha_camera= 45.0
+        self.alpha_cannon = 0.0
         self.step_size = 1
-        self.obs = np.array((x, 0.0, z))
-        self.tgt = np.array((x, 0.0, z+1.0))
+        self.obs = np.array((x, 0.5, z))
+        self.tgt = np.array((x, 0.5, z+10.0))
         self.cam = np.array((0.0, 1.0, 0.0))
 
     def set_position(self, aspect_ratio):
@@ -49,11 +50,29 @@ class Player:
             self.cam[0], self.cam[1], self.cam[2]
         )
 
-    def draw(self):
+    def draw(self) -> None:
         """
-        Draw Player
+        Draws player
         """
-        pass
+        quadric = gluNewQuadric()
+        glPushMatrix()
+        glTranslated(self.obs[0], -0.5, self.obs[2]+ 1)
+        glRotatef(self.alpha_cannon,0,1,0)
+        glutSolidCube(1)
+        gluCylinder(quadric, 0.2, 0.2, 4, 5, 5);
+
+        glPopMatrix()
+
+    def rotate(self, factor:bool) -> None:
+        """
+        Rotates the cannon structure 
+        """
+
+        if factor:
+            self.alpha_cannon -= 0.0
+        else:
+            self.alpha_cannon += 0.0
+
 
     def forward(self) -> None:
         """
@@ -76,17 +95,21 @@ class Player:
         Look left 
         """
         self.tgt -= self.obs
-        self.tgt[0] = self.tgt[0] * cos(self.alpha) + self.tgt[2] * sin(self.alpha) 
+        self.tgt[0] = (self.tgt[0] * cos(self.alpha_camera)) + (self.tgt[2] * sin(self.alpha_camera))
         self.tgt[1] = self.tgt[1]
-        self.tgt[2] = -self.tgt[0] * sin(self.alpha) + self.tgt[2] * cos(self.alpha)
+        self.tgt[2] = (-self.tgt[0] * sin(self.alpha_camera)) + (self.tgt[2] * cos(self.alpha_camera))
         self.tgt += self.obs
-    
+        print(self.tgt)
+
     def right(self) -> None:
         """
         Look right
         """
         self.tgt -= self.obs
-        self.tgt[0] = self.tgt[0] * cos(-self.alpha) + self.tgt[2] * sin(-self.alpha)
+        self.tgt[0] = (self.tgt[0] * cos(-self.alpha_camera)) + (self.tgt[2] * sin(-self.alpha_camera))
         self.tgt[1] = self.tgt[1]
-        self.tgt[2] = -self.tgt[0] * sin(-self.alpha) + self.tgt[2] * cos(-self.alpha)
+        self.tgt[2] = (-self.tgt[0] * sin(-self.alpha_camera)) + (self.tgt[2] * cos(-self.alpha_camera))
         self.tgt += self.obs
+        print(self.tgt)
+
+
