@@ -5,6 +5,7 @@
 from src.floor import Floor
 from src.player import Player
 from src.wall import Wall
+from src.common.texture import load
 
 # external dependencies
 from OpenGL.GL import *
@@ -22,19 +23,28 @@ nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
 
-floor = Floor(25, 50)
-player = Player(12.0, 0.0)
-wall = Wall()
+floor, player, wall = None, None, None
+
 
 def init():
     """
     Initialize opengl parameters
     """
-    wall.build(25, 10, 25)
+    global floor, player, wall
+
     glClearColor(0.5, 0.5, 0.5, 1.0)
     glEnable(GL_DEPTH_TEST)
     glEnable (GL_CULL_FACE )
+    glEnable(GL_TEXTURE_2D)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+
+    tex = load('./static/textures/rock-tile-2.jpg')
+
+    floor = Floor(25, 50)
+    player = Player(12.0, 0.0)
+    wall = Wall(tex)
+    wall.build(25, 10, 25)
 
 
 def reshape(w: int, h: int):

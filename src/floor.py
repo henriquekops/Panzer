@@ -40,7 +40,7 @@ class Floor():
         """
         Draw floor cell 1x1 (center at 0,0,0 and over XZ axis)
         """
-        glColor3f(0,0,1) # quad
+        glColor3f(0.25,1.0,0.25) # quad
         glBegin ( GL_QUADS )
         glNormal3f(0, 1, 0)
         glVertex3f(-0.5,  0.0, -0.5)
@@ -49,11 +49,11 @@ class Floor():
         glVertex3f( 0.5,  0.0, -0.5)
         glEnd()
         
-        glColor3f(1, 1, 1) # border
-        glBegin ( GL_LINE_STRIP )
-        glNormal3f(0, 1, 0)
-        glVertex3f(-0.5,  0.0, -0.5)
-        glVertex3f(-0.5,  0.0,  0.5)
-        glVertex3f( 0.5,  0.0,  0.5)
-        glVertex3f( 0.5,  0.0, -0.5)
-        glEnd()
+        # glColor3f(1, 1, 1) # border
+        # glBegin ( GL_LINE_STRIP )
+        # glNormal3f(0, 1, 0)
+        # glVertex3f(-0.5,  0.0, -0.5)
+        # glVertex3f(-0.5,  0.0,  0.5)
+        # glVertex3f( 0.5,  0.0,  0.5)
+        # glVertex3f( 0.5,  0.0, -0.5)
+        # glEnd()

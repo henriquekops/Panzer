@@ -35,14 +35,15 @@ class Wall:
         
         def draw(self) -> None:
             glPushMatrix()
-            glTranslate(self.x, self.y, self.z)
+            glTranslated(self.x, self.y, self.z)
             glutSolidCube(1)
             glPopMatrix()
 
-    def __init__(self) -> None:
+    def __init__(self, texture_id) -> None:
         self.cells: self.Cell = []
+        self.texture_id = texture_id
 
-    def build(self, width, height, dist): # texture
+    def build(self, width, height, dist):
         """
         Build wall
         """
@@ -61,5 +62,10 @@ class Wall:
             if not cell.destroyed:
                 glPushMatrix()
                 glColor3f(1.0, 1.0, 1.0)
+                glEnable(GL_TEXTURE_GEN_S)
+                glEnable(GL_TEXTURE_GEN_T)
+                glBindTexture(GL_TEXTURE_2D, self.texture_id)
                 cell.draw()
+                glDisable(GL_TEXTURE_GEN_S)
+                glDisable(GL_TEXTURE_GEN_T)
                 glPopMatrix()
