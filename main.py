@@ -36,8 +36,6 @@ def init():
     glClearDepth(1.0) 
     glDepthFunc(GL_LESS)
     glEnable(GL_DEPTH_TEST)
-    #    
-    glEnable(GL_DEPTH_TEST)
     glEnable (GL_CULL_FACE )
     glEnable(GL_TEXTURE_2D)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
@@ -110,18 +108,11 @@ def set_light():
     glMateriali(GL_FRONT,GL_SHININESS,51)
 
 
-def DesenhaCubo():
-    """
-    Draw cube
-    """
-    glutSolidCube(1)
-
-
 def display():
     """
     Display everything
     """
-    global angle
+    #global angle
     # Limpa a tela com  a cor de fundo
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -147,7 +138,7 @@ def display():
     # DesenhaCubo()
     # glPopMatrix()
 
-    angle = angle + 1
+    #angle = angle + 1
 
     glutSwapBuffers()
 
@@ -166,7 +157,7 @@ def animate():
     TempoTotal += dt
     nFrames += 1
     
-    if AccumDeltaT > 1.0/30:  # fixa a atualizaÃ§Ã£o da tela em 30
+    if AccumDeltaT > 1.0/30:  
         AccumDeltaT = 0
         glutPostRedisplay()
 
@@ -206,7 +197,7 @@ if __name__ == "__main__":
     glutInitWindowPosition(0, 0)
     glutInitWindowSize(650, 500)
     glutInitWindowPosition(100, 100)
-    wind = glutCreateWindow("OpenGL 3D")
+    wind = glutCreateWindow("Panzer")
     glutDisplayFunc(display)
     glutIdleFunc (animate)
     glutReshapeFunc(reshape)

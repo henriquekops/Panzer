@@ -47,8 +47,8 @@ class Wall:
         """
         Build wall
         """
-        for x in range(0, width-1):
-            for y in range(-1, height-2):
+        for x in range(0, width):
+            for y in range(-1, height):
                 self.cells.append(
                     self._Cell(x, y, dist)
                 )
