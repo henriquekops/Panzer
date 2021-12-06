@@ -17,18 +17,19 @@ class Floor():
     Floor class
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, width, height) -> None:
+        self.width = round(width)
+        self.height = round(height)
 
     def draw(self):
         """
-        Draw wall
+        Draw floor
         """
         glPushMatrix()
-        glTranslated(-20,-1,-10)
-        for _ in range(-20, 20):
+        glTranslated(0, -1, 0)
+        for _ in range(0, self.width):
             glPushMatrix()
-            for _ in range(-20, 20):
+            for _ in range(0, self.height):
                 self.__draw_cell()
                 glTranslated(0, 0, 1)
             glPopMatrix()
@@ -39,18 +40,18 @@ class Floor():
         """
         Draw floor cell 1x1 (center at 0,0,0 and over XZ axis)
         """
-        glColor3f(0,0,1) # desenha QUAD preenchido
+        glColor3f(0,0,1) # quad
         glBegin ( GL_QUADS )
-        glNormal3f(0,1,0)
+        glNormal3f(0, 1, 0)
         glVertex3f(-0.5,  0.0, -0.5)
         glVertex3f(-0.5,  0.0,  0.5)
         glVertex3f( 0.5,  0.0,  0.5)
         glVertex3f( 0.5,  0.0, -0.5)
         glEnd()
         
-        glColor3f(1,1,1) # desenha a borda da QUAD 
+        glColor3f(1, 1, 1) # border
         glBegin ( GL_LINE_STRIP )
-        glNormal3f(0,1,0)
+        glNormal3f(0, 1, 0)
         glVertex3f(-0.5,  0.0, -0.5)
         glVertex3f(-0.5,  0.0,  0.5)
         glVertex3f( 0.5,  0.0,  0.5)

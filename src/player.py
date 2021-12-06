@@ -19,18 +19,17 @@ import numpy as np
 
 
 OpenGlObject.register
-class Player():
+class Player:
 
     """
     Player class
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, x:float, z:float) -> None:
         self.alpha = 0.45
         self.step_size = 1
-        self.obs = np.array((0.0, 0.0, 10.0))
-        self.tgt = np.array((0.0, 0.0, 0.0))
+        self.obs = np.array((x, 0.0, z))
+        self.tgt = np.array((x, 0.0, z+1.0))
         self.cam = np.array((0.0, 1.0, 0.0))
 
     def set_position(self, aspect_ratio):
@@ -40,7 +39,7 @@ class Player():
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
 
-        gluPerspective(40, aspect_ratio, 0.01, 50)
+        gluPerspective(40, aspect_ratio, 0.05, 100)
         
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()

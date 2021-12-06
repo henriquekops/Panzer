@@ -4,6 +4,7 @@
 # project dependencies
 from src.floor import Floor
 from src.player import Player
+from src.wall import Wall
 
 # external dependencies
 from OpenGL.GL import *
@@ -21,13 +22,15 @@ nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
 
-floor = Floor()
-player = Player()
+floor = Floor(25, 50)
+player = Player(12.0, 0.0)
+wall = Wall()
 
 def init():
     """
     Initialize opengl parameters
     """
+    wall.build(25, 10, 25)
     glClearColor(0.5, 0.5, 0.5, 1.0)
     glEnable(GL_DEPTH_TEST)
     glEnable (GL_CULL_FACE )
@@ -114,20 +117,21 @@ def display():
     glMatrixMode(GL_MODELVIEW)
     
     floor.draw()
+    wall.draw()
 
-    glColor3f(0.5,0.0,0.0) # Vermelho
-    glPushMatrix()
-    glTranslatef(-2,0,0)
-    glRotatef(angle,0,1,0)
-    DesenhaCubo()
-    glPopMatrix()
+    # glColor3f(0.5,0.0,0.0) # Vermelho
+    # glPushMatrix()
+    # glTranslatef(-2,0,0)
+    # glRotatef(angle,0,1,0)
+    # DesenhaCubo()
+    # glPopMatrix()
     
-    glColor3f(0.5,0.5,0.0) # Amarelo
-    glPushMatrix()
-    glTranslatef(2,0,0)
-    glRotatef(-angle,0,1,0)
-    DesenhaCubo()
-    glPopMatrix()
+    # glColor3f(0.5,0.5,0.0) # Amarelo
+    # glPushMatrix()
+    # glTranslatef(2,0,0)
+    # glRotatef(-angle,0,1,0)
+    # DesenhaCubo()
+    # glPopMatrix()
 
     angle = angle + 1
 

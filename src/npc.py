@@ -6,7 +6,7 @@ from src.common.opengl_object import OpenGlObject
 
 
 OpenGlObject.register
-class Npc():
+class Npc:
 
     """
     Npc class

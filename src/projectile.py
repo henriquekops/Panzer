@@ -5,7 +5,7 @@
 from src.common.opengl_object import OpenGlObject
 
 @OpenGlObject.register
-class Projectile():
+class Projectile:
 
     """
     Projectile class
