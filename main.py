@@ -4,7 +4,8 @@
 # project dependencies
 from src.floor import Floor
 from src.player import Player
-from src.wall import Wall
+from src.wall import Cell, Wall
+from src.projectile import Projectile
 from src.common.texture import load
 
 # external dependencies
@@ -22,7 +23,6 @@ aspect_ratio= 0.0
 nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
-shoot = False
 
 floor: Floor
 player: Player
@@ -57,18 +57,13 @@ def reshape(w: int, h: int):
     Handle screen reshaping
     """
     global aspect_ratio
-	# Evita divisÃ£o por zero, no caso de uam janela com largura 0.
     if h == 0:
         h = 1
-    # Ajusta a relaÃ§Ã£o entre largura e altura para evitar distorÃ§Ã£o na imagem.
-    # Veja funÃ§Ã£o "PosicUser".
     aspect_ratio = w / h
-	# Reset the coordinate system before modifying
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    # Seta a viewport para ocupar toda a janela
     glViewport(0, 0, w, h)
-    
+
     player.set_position(aspect_ratio)
 
 
@@ -76,77 +71,54 @@ def set_light():
     """
     Set light system
     """
-    # Define cores para um objeto dourado
     LuzAmbiente = [0.4, 0.4, 0.4] 
     LuzDifusa   = [0.7, 0.7, 0.7]
     LuzEspecular = [0.9, 0.9, 0.9]
     PosicaoLuz0  = [2.0, 3.0, 0.0 ]
     Especularidade = [1.0, 1.0, 1.0]
-
-    # ****************  Fonte de Luz 0
-
     glEnable ( GL_COLOR_MATERIAL )
-
-    #Habilita o uso de iluminaÃ§Ã£o
     glEnable(GL_LIGHTING)
-
-    #Ativa o uso da luz ambiente
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente)
-    # Define os parametros da luz nÃºmero Zero
     glLightfv(GL_LIGHT0, GL_AMBIENT, LuzAmbiente)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, LuzDifusa  )
     glLightfv(GL_LIGHT0, GL_SPECULAR, LuzEspecular  )
     glLightfv(GL_LIGHT0, GL_POSITION, PosicaoLuz0 )
     glEnable(GL_LIGHT0)
-
-    # Ativa o "Color Tracking"
     glEnable(GL_COLOR_MATERIAL)
-
-    # Define a reflectancia do material
     glMaterialfv(GL_FRONT,GL_SPECULAR, Especularidade)
-
-    # Define a concentraÃ§Ã£oo do brilho.
-    # Quanto maior o valor do Segundo parametro, mais
-    # concentrado serÃ¡ o brilho. (Valores vÃ¡lidos: de 0 a 128)
     glMateriali(GL_FRONT,GL_SHININESS,51)
 
-accum = 0.0
+
 def display():
     """
     Display everything
     """
-    global accum
-    #global angle
-    # Limpa a tela com  a cor de fundo
+    global player
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
     set_light()
-    player.set_position(aspect_ratio)
-
     glMatrixMode(GL_MODELVIEW)
     
+    player.set_position(aspect_ratio)
     floor.draw()
     wall.draw()
     player.draw()
-    if shoot:
-        accum += 1
-        player.shoot(accum)
-    # glColor3f(0.5,0.0,0.0) # Vermelho
-    # glPushMatrix()
-    # glTranslatef(-2,0,0)
-    # glRotatef(angle,0,1,0)
-    # DesenhaCubo()
-    # glPopMatrix()
+
+    p: Projectile
+    for p in player.projectiles:
+        if p.delete:
+            player.projectiles.remove(p)
+        else:
+            p.draw()
+            cell: Cell
+            for cell in wall.cells:
+                # p.collision(cell)
+                if p.collision(cell):
+                    cell.destroy()
     
-    # glColor3f(0.5,0.5,0.0) # Amarelo
-    # glPushMatrix()
-    # glTranslatef(2,0,0)
-    # glRotatef(-angle,0,1,0)
-    # DesenhaCubo()
-    # glPopMatrix()
-
-    #angle = angle + 1
-
+    if player.cooldown > 0:
+        player.cooldown -= 1
+    
     glutSwapBuffers()
 
 
@@ -173,12 +145,14 @@ def keyboard(*args):
     """
     Hanlde keyboard 
     """
-    global player, shoot
+    global player
 
     if args[0] == ESCAPE:
         os._exit(0)
     if args[0] == b' ':
-        shoot = True
+        if player.cooldown == 0:
+            player.shoot()
+            player.cooldown = 50
     if args[0] == b'w':
         if player.alpha_aim > -25:
             player.alpha_aim -= 1

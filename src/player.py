@@ -11,6 +11,7 @@ from math import (
 # project dependencies
 from src.common.opengl_object import OpenGlObject
 from src.common.utils import Utils
+from src.projectile import Projectile
 
 # external dependencies
 from OpenGL.GL import *
@@ -34,6 +35,8 @@ class Player:
         self.obs = np.array((x, 0.5, z))
         self.tgt = np.array((x, 0.5, z+10.0))
         self.cam = np.array((0.0, 1.0, 0.0))
+        self.projectiles = []
+        self.cooldown = 0
 
     def set_position(self, aspect_ratio):
         """
@@ -64,16 +67,11 @@ class Player:
         gluCylinder(quadric, 0.2, 0.2, 5, 5, 5)
         glPopMatrix()
 
-    def shoot(self, accum) ->  None:
+    def shoot(self) -> None:
         """
-        Shoot projectile
+        Add projectile
         """
-        glPushMatrix()
-        glColor3f(1, 1, 1)
-        glTranslated(self.obs[0], (self.obs[1] - 1.0), self.obs[2]+accum)
-        glRotatef(self.alpha_cannon, 0, 1, 0)
-        glutSolidSphere(0.2, 5, 5)
-        glPopMatrix()
+        self.projectiles.append(Projectile(self.obs[0], self.obs[1], self.obs[2], self.alpha_cannon))
 
     def forward(self) -> None:
         """

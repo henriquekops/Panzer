@@ -11,36 +11,37 @@ from OpenGL.GLU import *
 
 
 @OpenGlObject.register
+class Cell:
+
+    """
+    Wall cell class
+    """
+
+    def __init__(self, x, y ,z) -> None:
+        self.destroyed = False
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def destroy(self) -> None:
+        self.destroyed = True
+    
+    def draw(self) -> None:
+        glPushMatrix()
+        glTranslated(self.x, self.y, self.z)
+        glutSolidCube(1)
+        glPopMatrix()
+
+
+@OpenGlObject.register
 class Wall:
 
     """
     Wall class
     """
 
-    @OpenGlObject.register
-    class _Cell:
-
-        """
-        Wall cell class
-        """
-
-        def __init__(self, x, y ,z) -> None:
-            self.destroyed = False
-            self.x = x
-            self.y = y
-            self.z = z
-
-        def destroy(self) -> None:
-            self.destroyed = True
-        
-        def draw(self) -> None:
-            glPushMatrix()
-            glTranslated(self.x, self.y, self.z)
-            glutSolidCube(1)
-            glPopMatrix()
-
     def __init__(self, texture_id) -> None:
-        self.cells: self.Cell = []
+        self.cells = []
         self.texture_id = texture_id
 
     def build(self, width, height, dist):
@@ -50,14 +51,14 @@ class Wall:
         for x in range(0, width):
             for y in range(-1, height):
                 self.cells.append(
-                    self._Cell(x, y, dist)
+                    Cell(x, y, dist)
                 )
 
     def draw(self):
         """
         Draw wall
         """
-        cell: self._Cell
+        cell: Cell
         for cell in self.cells:
             if not cell.destroyed:
                 glPushMatrix()
@@ -69,3 +70,5 @@ class Wall:
                 glDisable(GL_TEXTURE_GEN_S)
                 glDisable(GL_TEXTURE_GEN_T)
                 glPopMatrix()
+            else:
+                self.cells.remove(cell)
