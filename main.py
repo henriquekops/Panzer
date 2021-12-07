@@ -22,8 +22,11 @@ aspect_ratio= 0.0
 nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
 oldTime = time.time()
 ESCAPE = b'\x1b'
+shoot = False
 
-floor, player, wall = None, None, None
+floor: Floor
+player: Player
+wall: Wall
 
 
 def init():
@@ -107,11 +110,12 @@ def set_light():
     # concentrado serÃ¡ o brilho. (Valores vÃ¡lidos: de 0 a 128)
     glMateriali(GL_FRONT,GL_SHININESS,51)
 
-
+accum = 0.0
 def display():
     """
     Display everything
     """
+    global accum
     #global angle
     # Limpa a tela com  a cor de fundo
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -124,7 +128,9 @@ def display():
     floor.draw()
     wall.draw()
     player.draw()
-
+    if shoot:
+        accum += 1
+        player.shoot(accum)
     # glColor3f(0.5,0.0,0.0) # Vermelho
     # glPushMatrix()
     # glTranslatef(-2,0,0)
@@ -167,11 +173,18 @@ def keyboard(*args):
     """
     Hanlde keyboard 
     """
-    if args[0] == ESCAPE:   # Termina o programa qdo
-        os._exit(0)         # a tecla ESC for pressionada
+    global player, shoot
 
+    if args[0] == ESCAPE:
+        os._exit(0)
     if args[0] == b' ':
-        init()
+        shoot = True
+    if args[0] == b'w':
+        if player.alpha_aim > -25:
+            player.alpha_aim -= 1
+    if args[0] == b's':
+        if player.alpha_aim < 5:
+            player.alpha_aim += 1
 
     glutPostRedisplay()
 
@@ -180,17 +193,15 @@ def arrow_keys(a_keys: int, x: int, y: int):
     """
     Handle arrow keys
     """
-    if a_keys == GLUT_KEY_UP:         # Se pressionar UP
+    if a_keys == GLUT_KEY_UP:
         player.forward()
-    if a_keys == GLUT_KEY_DOWN:       # Se pressionar DOWN
+    if a_keys == GLUT_KEY_DOWN:
         player.backward()
-    if a_keys == GLUT_KEY_LEFT:       # Se pressionar LEFT
+    if a_keys == GLUT_KEY_LEFT:
         player.left()
-        player.rotate(False)
-    elif a_keys == GLUT_KEY_RIGHT:      # Se pressionar RIGHT
+    if a_keys == GLUT_KEY_RIGHT:
         player.right()
-        player.rotate(True)
-    
+
     glutPostRedisplay()
 
 

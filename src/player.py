@@ -29,9 +29,10 @@ class Player:
     def __init__(self, x:float, z:float) -> None:
         self.alpha_camera = 5
         self.alpha_cannon = 0.0
+        self.alpha_aim = 0.0
         self.step_size = 1
         self.obs = np.array((x, 0.5, z))
-        self.tgt = np.array((x, 0.5, z+1.0))
+        self.tgt = np.array((x, 0.5, z+10.0))
         self.cam = np.array((0.0, 1.0, 0.0))
 
     def set_position(self, aspect_ratio):
@@ -57,23 +58,22 @@ class Player:
         """
         quadric = gluNewQuadric()
         glPushMatrix()
-        glTranslated(self.obs[0], -0.5, self.obs[2]+ 1)
-        glRotatef(self.alpha_cannon,0,1,0)
-        glutSolidCube(1)
-        gluCylinder(quadric, 0.2, 0.2, 4, 5, 5)
-
+        glTranslated(self.obs[0], -0.5, self.obs[2])
+        glRotatef(self.alpha_cannon, 0, 1, 0)
+        glRotatef(self.alpha_aim, 1, 0, 0)
+        gluCylinder(quadric, 0.2, 0.2, 5, 5, 5)
         glPopMatrix()
 
-    def rotate(self, factor:bool) -> None:
+    def shoot(self, accum) ->  None:
         """
-        Rotates the cannon structure 
+        Shoot projectile
         """
-
-        if factor:
-            self.alpha_cannon -= self.alpha_camera
-        else:
-            self.alpha_cannon += self.alpha_camera
-
+        glPushMatrix()
+        glColor3f(1, 1, 1)
+        glTranslated(self.obs[0], (self.obs[1] - 1.0), self.obs[2]+accum)
+        glRotatef(self.alpha_cannon, 0, 1, 0)
+        glutSolidSphere(0.2, 5, 5)
+        glPopMatrix()
 
     def forward(self) -> None:
         """
@@ -100,7 +100,7 @@ class Player:
         self.tgt[1] = self.tgt[1]
         self.tgt[2] = (-self.tgt[0] * sin(radians(self.alpha_camera))) + (self.tgt[2] * cos(radians(self.alpha_camera)))
         self.tgt += self.obs
-        print(self.tgt)
+        self.alpha_cannon += self.alpha_camera
 
     def right(self) -> None:
         """
@@ -111,6 +111,6 @@ class Player:
         self.tgt[1] = self.tgt[1]
         self.tgt[2] = (-self.tgt[0] * sin(radians(-self.alpha_camera))) + (self.tgt[2] * cos(radians(-self.alpha_camera)))
         self.tgt += self.obs
-        print(self.tgt)
+        self.alpha_cannon -= self.alpha_camera
 
 
